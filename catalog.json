@@ -1,0 +1,204 @@
+{
+  "version": "2026.11.09",
+  "updatedAt": "2026-11-09",
+  "abilities": [
+    { "id": "run_commands", "label": "Run commands", "short": "Commands" },
+    { "id": "edit_files", "label": "Edit files", "short": "Files" },
+    { "id": "read_images", "label": "Read pictures", "short": "Pictures" },
+    { "id": "see_screen", "label": "See the screen", "short": "Screen" },
+    { "id": "operate_apps", "label": "Operate apps", "short": "Apps" },
+    { "id": "browse_web", "label": "Browse the web", "short": "Web" },
+    { "id": "make_images", "label": "Make pictures", "short": "Make pics" },
+    { "id": "make_videos", "label": "Make videos", "short": "Videos" },
+    { "id": "remember", "label": "Remember across sessions", "short": "Memory" },
+    { "id": "read_documents", "label": "Read documents (PDF, Word…)", "short": "Docs" }
+  ],
+  "tools": [
+    {
+      "tool": "Claude Code",
+      "abilities": {
+        "run_commands": { "state": "yes", "via": "built in" },
+        "edit_files": { "state": "yes", "via": "built in" },
+        "read_images": { "state": "yes", "via": "built in", "note": "Attach a picture or give it a file path." },
+        "see_screen": { "state": "no", "via": "", "note": "It can read a screenshot you give it, but cannot look by itself.", "enableWith": "agent-desktop" },
+        "operate_apps": { "state": "no", "via": "", "note": "Cannot click or type in other apps on its own.", "enableWith": "agent-desktop" },
+        "browse_web": { "state": "partly", "via": "built in", "note": "Fetches pages and searches; the Chrome extension lets it operate sites.", "enableWith": "claude-in-chrome" },
+        "make_images": { "state": "no", "via": "", "note": "It can draw with code (SVG, charts), not photos." },
+        "make_videos": { "state": "no", "via": "", "note": "Needs a video program it can run.", "enableWith": "ffmpeg" },
+        "remember": { "state": "partly", "via": "its own memory files", "note": "CLAUDE.md and its memory folder; MemPalace shares memory across tools.", "enableWith": "mempalace" },
+        "read_documents": { "state": "partly", "via": "built in", "note": "PDF yes; Word and Excel through skills." }
+      }
+    },
+    {
+      "tool": "Codex",
+      "abilities": {
+        "run_commands": { "state": "yes", "via": "built in" },
+        "edit_files": { "state": "yes", "via": "built in" },
+        "read_images": { "state": "yes", "via": "built in", "note": "Attach a picture or give it a file path." },
+        "see_screen": { "state": "no", "via": "", "note": "Needs the computer-use connector.", "enableWith": "codex-computer-use" },
+        "operate_apps": { "state": "no", "via": "", "note": "Needs the computer-use connector.", "enableWith": "codex-computer-use" },
+        "browse_web": { "state": "partly", "via": "built in", "note": "Web search built in; the Codex app's browser plugins operate sites." },
+        "make_images": { "state": "partly", "via": "built in", "note": "Recent versions have a picture tool; older ones do not." },
+        "make_videos": { "state": "no", "via": "", "note": "Needs a video program it can run.", "enableWith": "ffmpeg" },
+        "remember": { "state": "partly", "via": "its own memories", "note": "The Codex app keeps its own notes; MemPalace shares memory across tools.", "enableWith": "mempalace" },
+        "read_documents": { "state": "partly", "via": "built in", "note": "PDF through commands; Word and Excel with the document plugins." }
+      }
+    },
+    {
+      "tool": "OpenCode",
+      "abilities": {
+        "run_commands": { "state": "yes", "via": "built in" },
+        "edit_files": { "state": "yes", "via": "built in" },
+        "read_images": { "state": "partly", "via": "depends on the model", "note": "Only models that can see pictures read them." },
+        "see_screen": { "state": "no", "via": "", "note": "Needs a helper that can look at the screen.", "enableWith": "agent-desktop" },
+        "operate_apps": { "state": "no", "via": "", "note": "Needs a helper that can click and type.", "enableWith": "agent-desktop" },
+        "browse_web": { "state": "partly", "via": "built in", "note": "Fetches pages; cannot click around a site." },
+        "make_images": { "state": "no", "via": "", "note": "It can draw with code (SVG, charts), not photos." },
+        "make_videos": { "state": "no", "via": "", "note": "Needs a video program it can run.", "enableWith": "ffmpeg" },
+        "remember": { "state": "partly", "via": "AGENTS.md files", "note": "Only the instruction files you keep; MemPalace shares memory across tools.", "enableWith": "mempalace" },
+        "read_documents": { "state": "partly", "via": "depends on the model", "note": "PDF text through commands; Word and Excel need extra programs." }
+      }
+    }
+  ],
+  "helpers": [
+    {
+      "id": "agent-desktop",
+      "name": "agent-desktop",
+      "does": "Lets an AI tool look at the screen and click, type and read inside desktop apps.",
+      "forTasks": ["Test a desktop app", "Fill forms in an app", "Read what an app shows"],
+      "url": "https://agent-browser.dev/desktop",
+      "gives": ["see_screen", "operate_apps"],
+      "forTools": "all",
+      "installsInto": "computer",
+      "install": [
+        { "label": "Mac (Homebrew)", "command": "brew install agent-desktop" },
+        { "label": "Any system (npm)", "command": "npm install -g agent-desktop" },
+        { "label": "Windows", "command": "npm install -g agent-desktop", "note": "Needs Node.js. The first run asks for permission to control apps." }
+      ],
+      "detect": { "bin": "agent-desktop" }
+    },
+    {
+      "id": "graphify",
+      "name": "Graphify",
+      "does": "Builds a map of a project's code so the AI reads the map instead of every file. Fewer tokens per question on big projects.",
+      "forTasks": ["Ask questions about a big codebase", "Find what depends on what", "Save tokens"],
+      "url": "https://pypi.org/project/graphifyy/",
+      "gives": [],
+      "forTools": "all",
+      "installsInto": "project",
+      "install": [
+        { "label": "Install the program", "command": "uv tool install graphifyy", "note": "Or: pip install graphifyy (the name has two y's)." },
+        { "label": "Teach Claude Code to use it", "command": "graphify install --platform claude" },
+        { "label": "Teach Codex to use it", "command": "graphify install --platform codex" },
+        { "label": "Teach OpenCode to use it", "command": "graphify install --platform opencode" },
+        { "label": "Build the map for a project", "command": "/graphify .", "note": "Type this inside the AI tool, in the project folder. It uses the tool's tokens once; later questions use fewer." }
+      ],
+      "detect": { "bin": "graphify", "projectDir": "graphify-out" }
+    },
+    {
+      "id": "mempalace",
+      "name": "MemPalace",
+      "does": "One memory every tool can read. What you did in Claude Code, Codex or OpenCode can be found from any of them.",
+      "forTasks": ["Pick up work in another tool", "Remember decisions across sessions"],
+      "url": "https://mempalace.dev",
+      "gives": ["remember"],
+      "forTools": ["Claude Code", "Codex", "OpenCode"],
+      "installsInto": "computer",
+      "install": [
+        { "label": "Install the program", "command": "pip install mempalace", "note": "See mempalace.dev for other ways." },
+        { "label": "Connect Claude Code", "command": "claude mcp add --scope user mempalace -- mempalace-mcp" },
+        { "label": "Connect Codex", "command": "codex mcp add mempalace -- mempalace-mcp" },
+        { "label": "Connect OpenCode", "note": "Add to ~/.config/opencode/opencode.json under \"mcp\": \"mempalace\": { \"type\": \"local\", \"command\": [\"mempalace-mcp\"], \"enabled\": true }" }
+      ],
+      "detect": { "special": "mempalace" }
+    },
+    {
+      "id": "unslop",
+      "name": "UnSlop",
+      "does": "Guard rails for AI-written code: checks each change for the usual AI mistakes before it lands.",
+      "forTasks": ["Keep AI-written code clean", "Catch sloppy changes early"],
+      "url": "https://github.com/offleg/UnSlop",
+      "gives": [],
+      "forTools": "all",
+      "installsInto": "project",
+      "install": [
+        { "label": "Set it up in a project", "command": "npx @offleg/unslop init", "note": "Run inside the project folder. Needs Node.js." }
+      ],
+      "detect": { "projectDir": ".unslop" }
+    },
+    {
+      "id": "claude-in-chrome",
+      "name": "Claude in Chrome",
+      "does": "A browser extension that lets Claude Code open sites, click, fill forms and read pages in your own Chrome.",
+      "forTasks": ["Test a website", "Do things on sites you are signed in to"],
+      "url": "https://claude.com/chrome",
+      "gives": ["browse_web"],
+      "forTools": ["Claude Code"],
+      "installsInto": "browser",
+      "install": [
+        { "label": "Add the extension", "url": "https://claude.com/chrome", "note": "Exact link may change. Then start Claude Code with: claude --chrome" }
+      ],
+      "detect": { "special": "claude-in-chrome" }
+    },
+    {
+      "id": "codex-computer-use",
+      "name": "Codex computer use",
+      "does": "Lets Codex look at the screen and operate apps on this computer.",
+      "forTasks": ["Test a desktop app", "Do things in apps"],
+      "url": "https://developers.openai.com/codex",
+      "gives": ["see_screen", "operate_apps"],
+      "forTools": ["Codex"],
+      "installsInto": "Codex",
+      "install": [
+        { "label": "Turn it on in the Codex app", "note": "It comes with the Codex app (plugins). It is kept in ~/.codex/config.toml as [mcp_servers.computer-use] and the computer-use plugin." }
+      ],
+      "detect": { "special": "codex-computer-use" }
+    },
+    {
+      "id": "ffmpeg",
+      "name": "ffmpeg",
+      "does": "Makes, cuts and converts videos and sound. AI tools can run it to make videos from pictures or clips.",
+      "forTasks": ["Make a video", "Convert or shrink a video", "Pull sound out of a video"],
+      "url": "https://ffmpeg.org",
+      "gives": ["make_videos"],
+      "forTools": "all",
+      "installsInto": "computer",
+      "install": [
+        { "label": "Mac", "command": "brew install ffmpeg" },
+        { "label": "Windows", "command": "winget install Gyan.FFmpeg" }
+      ],
+      "detect": { "bin": "ffmpeg", "versionArgs": ["-version"] }
+    },
+    {
+      "id": "gh",
+      "name": "GitHub CLI (gh)",
+      "does": "Lets AI tools work with GitHub from the terminal: pull requests, issues, checks.",
+      "forTasks": ["Open a pull request", "Read issues", "Check if tests passed on GitHub"],
+      "url": "https://cli.github.com",
+      "gives": [],
+      "forTools": "all",
+      "installsInto": "computer",
+      "install": [
+        { "label": "Mac", "command": "brew install gh" },
+        { "label": "Windows", "command": "winget install GitHub.cli" },
+        { "label": "Sign in", "command": "gh auth login" }
+      ],
+      "detect": { "bin": "gh" }
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "does": "Runs programs in sealed boxes, so an AI tool can start databases or servers without changing your computer.",
+      "forTasks": ["Run a database for a project", "Try something without installing it"],
+      "url": "https://www.docker.com/products/docker-desktop/",
+      "gives": [],
+      "forTools": "all",
+      "installsInto": "computer",
+      "install": [
+        { "label": "Mac", "command": "brew install --cask docker" },
+        { "label": "Windows", "command": "winget install Docker.DockerDesktop" }
+      ],
+      "detect": { "bin": "docker" }
+    }
+  ]
+}
