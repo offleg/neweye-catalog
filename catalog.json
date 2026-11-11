@@ -1,6 +1,6 @@
 {
-  "version": "2026.11.09.2",
-  "updatedAt": "2026-11-09",
+  "version": "2026.11.10.2",
+  "updatedAt": "2026-11-10",
   "abilities": [
     {
       "id": "run_commands",
@@ -70,7 +70,12 @@
         {
           "label": "Any system (npm)",
           "command": "npm install -g @anthropic-ai/claude-code",
-          "note": "Needs Node.js 18 or newer. Then run `claude` once and sign in."
+          "note": "Needs Node.js 18 or newer."
+        },
+        {
+          "label": "Sign in",
+          "command": "claude",
+          "note": "Opens Claude Code once so you can sign in."
         }
       ],
       "abilities": {
@@ -137,11 +142,16 @@
         {
           "label": "Any system (npm)",
           "command": "npm install -g @openai/codex",
-          "note": "Needs Node.js. Then run `codex` once and sign in with your ChatGPT account."
+          "note": "Needs Node.js."
         },
         {
           "label": "Mac (Homebrew)",
           "command": "brew install --cask codex"
+        },
+        {
+          "label": "Sign in",
+          "command": "codex",
+          "note": "Opens Codex once so you can sign in with your ChatGPT account."
         }
       ],
       "abilities": {
@@ -215,6 +225,11 @@
         {
           "label": "Mac (Homebrew)",
           "command": "brew install opencode"
+        },
+        {
+          "label": "Sign in",
+          "command": "opencode auth login",
+          "note": "Pick a provider and sign in to it."
         }
       ],
       "abilities": {
@@ -280,11 +295,16 @@
         {
           "label": "Any system (npm)",
           "command": "npm install -g @google/gemini-cli",
-          "note": "Needs Node.js 20 or newer. Then run `gemini` once and pick how to sign in."
+          "note": "Needs Node.js 20 or newer."
         },
         {
           "label": "Mac (Homebrew)",
           "command": "brew install gemini-cli"
+        },
+        {
+          "label": "Sign in",
+          "command": "gemini",
+          "note": "Opens Gemini CLI once so you can pick how to sign in."
         }
       ],
       "abilities": {
@@ -353,8 +373,12 @@
         },
         {
           "label": "Windows (PowerShell)",
-          "command": "irm https://x.ai/cli/install.ps1 | iex",
-          "note": "Then run `grok login`."
+          "command": "irm https://x.ai/cli/install.ps1 | iex"
+        },
+        {
+          "label": "Sign in",
+          "command": "grok login",
+          "note": "Signs in to your xAI account."
         }
       ],
       "abilities": {
@@ -482,9 +506,9 @@
           "command": "graphify install --platform opencode"
         },
         {
-          "label": "Build the map for a project",
-          "command": "/graphify .",
-          "note": "Type this inside the AI tool, in the project folder. It uses the tool's tokens once; later questions use fewer."
+          "label": "Make the map for this project",
+          "command": "graphify update .",
+          "note": "Runs in the project folder and reads only the code files, so it costs no tokens. To include documents and pictures too, type /graphify . inside your AI tool in that folder instead; that uses the tool's tokens once."
         }
       ],
       "detect": {
@@ -526,7 +550,7 @@
         },
         {
           "label": "Connect OpenCode",
-          "note": "Add to ~/.config/opencode/opencode.json under \"mcp\": \"mempalace\": { \"type\": \"local\", \"command\": [\"mempalace-mcp\"], \"enabled\": true }"
+          "note": "Press Connect next to OpenCode on the Memory screen. It shows the lines to add to OpenCode's settings file."
         }
       ],
       "detect": {
@@ -576,7 +600,12 @@
         {
           "label": "Add the extension",
           "url": "https://claude.com/chrome",
-          "note": "Exact link may change. Then start Claude Code with: claude --chrome"
+          "note": "The exact link may change."
+        },
+        {
+          "label": "Start Claude Code with Chrome",
+          "command": "claude --chrome",
+          "note": "Starts Claude Code with the Chrome extension connected."
         }
       ],
       "detect": {
@@ -603,7 +632,7 @@
       "install": [
         {
           "label": "Turn it on in the Codex app",
-          "note": "It comes with the Codex app (plugins). It is kept in ~/.codex/config.toml as [mcp_servers.computer-use] and the computer-use plugin."
+          "note": "It comes with the Codex app. Open the Codex app, find Computer use among its plugins, and turn it on."
         }
       ],
       "detect": {
